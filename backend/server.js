@@ -4,7 +4,7 @@ import dotenv from  "dotenv";
 
 dotenv.config();
 
-const app = express();
+const app = express(c);
 
 app.use(cors());
 app.use(express.json());
