@@ -57,7 +57,12 @@ export async function login(data) {
     );
 
     return {
-        token,
-        user
-    };
+    token,
+    user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt
+    }
+};
 }

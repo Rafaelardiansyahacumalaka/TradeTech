@@ -1,4 +1,4 @@
-import * as authService from "../services/authService.js";
+import * as authService from "../services/auth.service.js";
 
 export async function register(req, res) {
     try {
