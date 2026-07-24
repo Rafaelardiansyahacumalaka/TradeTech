@@ -7,249 +7,202 @@
 
     let email = $state("");
     let password = $state("");
+
+    async function handleLogin() {
+
+        if (!email || !password) {
+            alert("Semua field wajib diisi!");
+            return;
+        }
+
+        try {
+
+            const response = await fetch("http://localhost:3000/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(result.message);
+                return;
+            }
+
+            localStorage.setItem("token", result.token);
+
+            alert("Login berhasil!");
+
+            window.location.href = "/";
+
+        } catch (error) {
+
+            alert("Server tidak dapat dihubungi");
+
+        }
+
+    }
 </script>
 
 <div class="page">
 
-    <div class="login-card">
+    <div class="register-card">
 
-        <h1>WELCOME</h1>
+        <h1>Welcome</h1>
+        <p>Sign in your account</p>
 
-        <p class="subtitle">
-            Sign In your account
-        </p>
+        <label for="email">Email</label>
 
-        <div class="form-group">
+        <div class="input-group">
+            <Mail size="20"/>
 
-            <label for="email">
-                Email
-            </label>
-
-            <div class="input-box">
-
-                <Mail
-                    size={28}
-                    strokeWidth={2.5}
-                    class="icon"
-                />
-
-                <input
-                    id="email"
-                    type="email"
-                    bind:value={email}
-                    placeholder="Enter your email"
-                />
-
-            </div>
-
+            <input
+                id="email"
+                bind:value={email}
+                type="email"
+                placeholder="Enter your email"
+            >
         </div>
 
-        <div class="form-group">
+        <label for="password">Password</label>
 
-            <label for="password">
-                Password
-            </label>
+        <div class="input-group">
+            <Lock size="20"/>
 
-            <div class="input-box">
-
-                <Lock
-                    size={28}
-                    strokeWidth={2.5}
-                    class="icon"
-                />
-
-                <input
-                    id="password"
-                    type="password"
-                    bind:value={password}
-                    placeholder="Enter your password"
-                />
-
-            </div>
-
+            <input
+                id="password"
+                bind:value={password}
+                type="password"
+                placeholder="Enter your password"
+            >
         </div>
 
-        <a href="/" class="forgot">
-            Forgot your password?
-        </a>
-
-        <button class="login-btn">
+        <button onclick={handleLogin}>
             Sign In
         </button>
 
-        <p class="signup">
+        <div class="login-link">
             Don't have an account?
-            <span>Sign Up</span>
-        </p>
+            <a href="/register">Sign Up</a>
+        </div>
 
     </div>
 
 </div>
 
 <style>
+
+:global(body){
+    margin:0;
+    font-family:Inter,sans-serif;
+    background:#d9d9d9;
+}
+
 .page{
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#f5f5f5;
-    padding:40px;
-}
-
-.login-card{
-    width:760px;
-    background:#5f73d1;
-    border-radius:14px;
-    padding:35px 60px 50px;
-    box-shadow:8px 8px 0 #3e3e3e;
-    position:relative;
-}
-
-.login-card h1{
-    margin:0;
-    margin-top:-70px;
-    text-align:center;
-    font-size:82px;
-    color:white;
-    font-weight:900;
-    letter-spacing:2px;
-    text-shadow:
-        -3px -3px 0 #999,
-        3px -3px 0 #999,
-        -3px 3px 0 #999,
-        3px 3px 0 #999,
-        7px 7px rgba(0,0,0,.25);
-}
-
-.subtitle{
-    margin-top:8px;
-    margin-bottom:70px;
-    text-align:center;
-    color:white;
-    font-size:26px;
-    font-weight:700;
-}
-
-.form-group{
-    margin-bottom:48px;
-}
-
-.form-group label{
-    display:block;
-    margin-bottom:18px;
-    color:white;
-    font-size:28px;
-    font-weight:900;
-}
-
-.input-box{
-    display:flex;
-    align-items:center;
-    gap:18px;
-    height:74px;
-    padding:0 24px;
-    background:#9db8ff;
-    border-radius:14px;
-    box-shadow:inset 0 0 12px rgba(255,255,255,.45);
-}
-
-.input-box input{
-    flex:1;
-    border:none;
-    outline:none;
-    background:transparent;
-    color:white;
-    font-size:28px;
-    font-weight:700;
-}
-
-.input-box input::placeholder{
-    color:#dfe7ff;
-}
-
-.forgot{
-    display:block;
-    margin-top:-20px;
-    margin-bottom:45px;
-    text-align:right;
-    text-decoration:none;
-    color:#dce5ff;
-    font-size:22px;
-    font-weight:800;
-}
-
-.login-btn{
-    width:100%;
-    height:78px;
-    border:none;
-    border-radius:14px;
-    cursor:pointer;
-    color:white;
-    font-size:34px;
-    font-weight:900;
-    background:linear-gradient(90deg,#d044ea,#ef49db);
-    box-shadow:0 8px 20px rgba(210,0,255,.35);
-    transition:.2s;
-}
-
-.login-btn:hover{
-    transform:translateY(-2px);
-}
-
-.signup{
-    margin-top:28px;
-    text-align:center;
-    color:white;
-    font-size:24px;
-    font-weight:700;
-}
-
-.signup span{
-    font-weight:900;
-}
-
-@media(max-width:900px){
-
-.login-card{
-    width:100%;
     padding:30px;
 }
 
-.login-card h1{
-    font-size:56px;
-    margin-top:-55px;
+.register-card{
+    width:430px;
+    background:linear-gradient(180deg,#655178,#6e3aa4);
+    border-radius:14px;
+    padding:40px;
+    box-shadow:8px 8px 0 #333;
 }
 
-.subtitle{
-    font-size:20px;
-    margin-bottom:45px;
+h1{
+    margin:0;
+    text-align:center;
+    color:white;
+    font-size:42px;
+    font-weight:900;
 }
 
-.form-group label{
-    font-size:22px;
+p{
+    margin-top:5px;
+    text-align:center;
+    color:white;
+    font-weight:700;
+    margin-bottom:35px;
 }
 
-.input-box{
-    height:62px;
+label{
+    display:block;
+    color:white;
+    font-weight:700;
+    margin-bottom:8px;
+    margin-top:18px;
 }
 
-.input-box input{
-    font-size:20px;
+.input-group{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#8fb2ff;
+    padding:14px;
+    border-radius:8px;
 }
 
-.login-btn{
-    height:65px;
-    font-size:28px;
+.input-group input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:none;
+    color:white;
+    font-size:16px;
 }
 
-.signup{
-    font-size:18px;
+.input-group input::placeholder{
+    color:#dde7ff;
 }
 
-.forgot{
-    font-size:18px;
+.input-group :global(svg){
+    color:#dde7ff;
 }
 
+button{
+    width:100%;
+    margin-top:35px;
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    background:#d547ff;
+    color:white;
+    font-size:24px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.login-link{
+    margin-top:18px;
+    text-align:center;
+    color:white;
+    font-size:14px;
+}
+
+.login-link a{
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+}
+
+.login-link a:hover{
+    text-decoration:underline;
 }
 
 </style>
